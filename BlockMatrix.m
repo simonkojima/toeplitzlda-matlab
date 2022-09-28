@@ -58,15 +58,17 @@ classdef BlockMatrix < BlockBased
       end
       
       function obj = set_block_diagnal_blockmat(obj, blockmat, diagonal_offset)
-        repeats = obj.block_dim(2) - abs(diagonal_offset);
-        blockmat = reshape(blockmat, 1, []);
-
-        if size(blockmat,3) == 1
-            blockmat = repmat(blockmat, [repeats 1]);
-        end
-
-        [obj,d,idx] = obj.get_block_diagonal(diagonal_offset);
-        obj.mat(idx) = blockmat;
+          repeats = obj.block_dim(2) - abs(diagonal_offset);
+  
+          if size(blockmat,3) == 1
+              blockmat = reshape(blockmat, 1, []);
+              blockmat = repmat(blockmat, [repeats 1]);
+          else
+             blockmat = permute(blockmat, [3,1,2]); 
+          end
+          
+          [obj,d,idx] = obj.get_block_diagonal(diagonal_offset);
+          obj.mat(idx) = blockmat;
       end
    end
 end

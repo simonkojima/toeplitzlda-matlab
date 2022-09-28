@@ -6,13 +6,15 @@ clc
 
 %mat = readNPY('cov.npy');
 
-mat = 1:64;
-mat = reshape(mat, [8,8])
+mat = 1:100;
+mat = reshape(mat, [10,10]);
 
 nch = 2;
-ntim = 4;
+ntim = 5;
 
-stm = SpatioTemporalMatrix(mat,nch,ntim,true);
-stm = stm.force_toeplitz_offdiagonals();
-stm.mat
+%stm = SpatioTemporalMatrix(mat,nch,ntim,true);
+%stm = stm.force_toeplitz_offdiagonals();
+%stm = stm.taper_offdiagonals(@linear_taper);
+%stm = stm.taper_offdiagonals();
+%stm.mat
 %size(stm.mat)
