@@ -33,8 +33,6 @@ classdef ToeplitzLDA
             end
             if nargin < 3
                 obj.unit_w = false;
-            else
-                obj.unit_w = true;
             end
         end
         
@@ -62,29 +60,28 @@ classdef ToeplitzLDA
                 error("pool_cov = False is not implemented yet")
             end
             
-            %C_cov(1:5,1)
-            % something wrong in shrinkage()
-            
-            return
+            % OK
             
             dim = size(C_cov,1);
             nt = calc_n_times(dim, obj.n_channels, obj.n_times);
             stm = SpatioTemporalMatrix(C_cov, obj.n_channels, nt, obj.data_is_channel_prime);
             
             if obj.enforce_toeplitz
-                
                 stm = stm.force_toeplitz_offdiagonals();
             end
             
             if ~isempty(obj.tapering)
                 stm = stm.taper_offdiagonals();
-            end
+            end           
+            
+            % OK
+            
             obj.stored_cl_mean = cl_mean;
             obj.stored_stm = stm;
-            C_cov = stm.mat;
+            C_cov = stm.mat;           
             
             prior_offset = log(priors);
-            
+
             w = linsolve(C_cov, cl_mean);
             if obj.unit_w
                 w = w / norm(w);

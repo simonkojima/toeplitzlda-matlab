@@ -39,15 +39,19 @@ classdef SpatioTemporalMatrix < BlockMatrix
             dim = obj.block_dim(2);
             for di = (-dim+1):(dim-1)
             %for di = -2:-2
-                %di = -2
+                %di = -4
                 %di
-                [obj,d, idx] = obj.get_block_diagonal(di);
+                [obj,d] = obj.get_block_diagonal(di);      
+                
                 if average_blocks == true
                     new_d = mean(d, 3);
                 else
                     new_d = sum(d, 3);
                 end
+                %ok
                 obj = obj.set_block_diagnal_blockmat(new_d, di);
+                
+                %error("abc")
             end
             obj = obj.to_2dblockmat();
         end
@@ -58,7 +62,9 @@ classdef SpatioTemporalMatrix < BlockMatrix
             end
             dim = obj.block_dim(2);
             for di = (-dim+1):(dim-1)
-                [obj,d, idx] = obj.get_block_diagonal(di);
+            %for di = 1:1
+                
+                [obj,d] = obj.get_block_diagonal(di);
                 new_d = d*linear_taper(di, dim);
                 obj = obj.set_block_diagnal_blockmat(new_d, di);
             end

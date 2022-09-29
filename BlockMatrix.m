@@ -52,23 +52,25 @@ classdef BlockMatrix < BlockBased
          obj.mat = mat_2d;
       end
       
-      function [obj, d, idx] = get_block_diagonal(obj, diagonal_offset)
+      function [obj, d] = get_block_diagonal(obj, diagonal_offset)
          obj = obj.to_4dblockmat();
-         [d,idx] = diagND(obj.mat,[],[], diagonal_offset);
+         d = diagonal_4d(obj.mat, diagonal_offset);
       end
       
       function obj = set_block_diagnal_blockmat(obj, blockmat, diagonal_offset)
           repeats = obj.block_dim(2) - abs(diagonal_offset);
-  
+
           if size(blockmat,3) == 1
-              blockmat = reshape(blockmat, 1, []);
+              blockmat = reshape(blockmat', 1, []);
               blockmat = repmat(blockmat, [repeats 1]);
+              blockmat = reshape(blockmat, 1, []);
           else
-             blockmat = permute(blockmat, [3,1,2]); 
+             blockmat = permute(blockmat, [3,2,1]);
+             blockmat = reshape(blockmat, 1, []);
           end
           
-          [obj,d,idx] = obj.get_block_diagonal(diagonal_offset);
-          obj.mat(idx) = blockmat;
+          obj.mat = set_diagonal_4d(obj.mat, blockmat, diagonal_offset);
+
       end
    end
 end
